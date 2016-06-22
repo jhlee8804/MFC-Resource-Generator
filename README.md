@@ -1,2 +1,2 @@
 # MFC Resource Generator
-Auto generate *.rc file for MFC Image DLL
+Auto generate resource.h and resource.rc file for MFC resource dll
