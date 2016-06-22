@@ -82,6 +82,9 @@
     <Content Include="Resource\dpi300\panel\test_explorer.png" />
     <Content Include="Resource\dpi300\panel\toolbox.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Generated\" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -25,9 +25,8 @@ namespace MFCResourceGenerator.Controller
         public bool Create()
         {
             if (Options.Verbose)
-                Trace.WriteLine("# Read resource.rc template.");
+                Console.WriteLine(Environment.NewLine + "# Read resource.rc template.");
 
-            string rcFile = File.ReadAllText(RC_FILE);
             string contents = string.Empty;
 
             for (int i = 0; i < Items.Count; ++i)
@@ -39,18 +38,36 @@ namespace MFCResourceGenerator.Controller
                 string idText = file.DefinedRCPathString;
 
                 if (Options.Verbose)
-                    Trace.WriteLine("\t" + idText);
+                    Console.WriteLine("\t" + idText);
 
                 contents += idText;
             }
 
-            rcFile = rcFile.Replace(PLACE_HOLDER, contents);
+            string newContents = File.ReadAllText(RC_FILE);
+            newContents = newContents.Replace(PLACE_HOLDER, contents);
 
-            string newRCPath = RC_FILE.Replace(".temp", string.Empty);
-            File.WriteAllText(newRCPath, rcFile);
+            string newPath = RC_FILE.Replace(".temp", string.Empty);
+            newPath = Path.Combine(Options.OutputPath, newPath);
 
-            if (Options.Verbose)
-                Trace.WriteLine("# Succeed to generate rc file: " + newRCPath);
+            bool overwrite = true;
+
+            if (File.Exists(newPath))
+            {
+                string oldContents = File.ReadAllText(newPath);
+                overwrite = oldContents != newContents;
+            }
+
+            if (overwrite)
+            {
+                File.WriteAllText(newPath, newContents);
+
+                if (Options.Verbose)
+                    Console.WriteLine("# Succeed to generate rc file: " + newPath);
+            }
+            else
+            {
+                Console.WriteLine("# Nothing changed rc file.");
+            }
 
             return true;
         }

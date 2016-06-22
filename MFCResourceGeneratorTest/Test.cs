@@ -9,8 +9,8 @@ namespace MFCResourceGeneratorTest
         [TestMethod]
         public void GenerateFile()
         {
-            string workingPath = "..\\..\\";
-            string resourcePath = workingPath + "Resource";
+            string workingPath = "../../Generated/";
+            string resourcePath = "../../Resource/";
 
             MFCResourceGenerator.Program.Main(new string[] {
                 "--wpath", workingPath,

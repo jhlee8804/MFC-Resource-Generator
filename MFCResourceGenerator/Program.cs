@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using MFCResourceGenerator.Configuration;
 using MFCResourceGenerator.Controller;
-using System.Diagnostics;
 using MFCResourceGenerator.Model;
-using MFCResourceGenerator.Utility;
 
 namespace MFCResourceGenerator
 {
@@ -19,24 +16,36 @@ namespace MFCResourceGenerator
             if (!CommandLine.Parser.Default.ParseArguments(args, options))
                 return;
 
+            if (string.IsNullOrEmpty(options.WorkingPath))
+            {
+                options.WorkingPath = Directory.GetCurrentDirectory();
+                Console.WriteLine("Working Path is empty. Default Path: " + options.OutputPath);
+            }
+
+            if (string.IsNullOrEmpty(options.OutputPath))
+            {
+                options.OutputPath = Directory.GetCurrentDirectory();
+                Console.WriteLine("Output Path is empty. Default Path: " + options.OutputPath);
+            }
+
             var items = ParseResourceItems(options);
             if (items.Count == 0)
             {
-                Trace.WriteLine("# Resource files empty.");
+                Console.WriteLine("# Resource files empty.");
                 return;
             }
 
             RCHeaderGenerator headerGen = new RCHeaderGenerator(items, options);
             if (!headerGen.Create())
             {
-                Trace.WriteLine("# Failed to generate header file.");
+                Console.WriteLine("# Failed to generate header file.");
                 return;
             }
 
             RCFileGenerator rcGen = new RCFileGenerator(items, options);
             if (!rcGen.Create())
             {
-                Trace.WriteLine("# Failed to generate rc file.");
+                Console.WriteLine("# Failed to generate rc file.");
                 return;
             }
         }
@@ -45,32 +54,28 @@ namespace MFCResourceGenerator
         {
             if (options.Verbose)
             {
-                Trace.WriteLine("# Working Path: " + options.WorkingPath);
-                Trace.WriteLine("# Resource Path: " + options.ResourcePath);
-                Trace.WriteLine("# Output Path: " + options.OutputPath);
+                Console.WriteLine("# Working Path: " + options.WorkingPath);
+                Console.WriteLine("# Resource Path: " + options.ResourcePath);
+                Console.WriteLine("# Output Path: " + options.OutputPath);
             }
 
             string[] resExtensions = { ".png" };
 
             if (options.Verbose)
-                Trace.WriteLine("# Target Resource Type: " + string.Join(", ", resExtensions));
+                Console.WriteLine("# Target Resource Type: " + string.Join(", ", resExtensions));
 
             var items = Directory.GetFiles(options.ResourcePath, "*.*", SearchOption.AllDirectories)
                 .Where(p => resExtensions.Any(o => p.EndsWith(o, StringComparison.OrdinalIgnoreCase)))
-                .Select(p =>
-                {
-                    string relativePath = PathUtils.MakeRelative(p, options.WorkingPath);
-                    return new ResourceItem(relativePath);
-                })
+                .Select(p => new ResourceItem(p, options))
                 .OrderBy(f => f.DefinedResourceIdString)
                 .ToList();
 
             if (options.Verbose)
             {
-                Trace.WriteLine("# Target Resource Files: " + items.Count);
+                Console.WriteLine("# Target Resource Files: " + items.Count);
 
                 foreach (var item in items)
-                    Trace.WriteLine("\t" + item.ToString());
+                    Console.WriteLine("\t" + item.ToString());
             }
 
             return items;

@@ -4,20 +4,26 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using MFCResourceGenerator.Configuration;
+using MFCResourceGenerator.Utility;
 
 namespace MFCResourceGenerator.Model
 {
     public class ResourceItem
     {
-        public ResourceItem(string path)
-        {
-            FileName = Path.GetFileNameWithoutExtension(path);
-            FilePath = path;
-            Type = Path.GetExtension(path).Replace(".", string.Empty).ToUpper();
+        private Options _options;
 
-            Debug.Assert(!string.IsNullOrEmpty(FileName));
-            Debug.Assert(!string.IsNullOrEmpty(FilePath));
-            Debug.Assert(!string.IsNullOrEmpty(Type));
+        public ResourceItem(string filePath, Options options)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(filePath));
+            Debug.Assert(options != null);
+
+            _options = options;
+
+            FileName = Path.GetFileNameWithoutExtension(filePath);
+            Type = Path.GetExtension(filePath).Replace(".", string.Empty).ToUpper();
+            FileRelativePath = PathUtils.MakeRelative(filePath, options.WorkingPath);
+            FileFullPath = Path.GetFullPath(filePath);
         }
 
         /// <summary>
@@ -26,14 +32,19 @@ namespace MFCResourceGenerator.Model
         public string FileName { get; set; }
 
         /// <summary>
-        /// Relative path of resource file.
-        /// </summary>
-        public string FilePath { get; set; }
-
-        /// <summary>
         /// Resource type (cf. PNG, BITMAP)
         /// </summary>
         public string Type { get; set; }
+
+        /// <summary>
+        /// Relative path of resource file.
+        /// </summary>
+        public string FileRelativePath { get; set; }
+
+        /// <summary>
+        /// Full path of resource file
+        /// </summary>
+        public string FileFullPath { get; set; }
 
         /// <summary>
         /// "#define IDB_DIR1_DIR2_DIR3_FILENAME
@@ -44,21 +55,20 @@ namespace MFCResourceGenerator.Model
             {
                 string text = "#define IDB_";
 
-                string id = string.Empty;
-                var segments = FilePath.Split(Path.AltDirectorySeparatorChar).ToList();
+                string temp = string.Empty;
+                {
+                    var path = PathUtils.MakeRelative(FileFullPath, _options.ResourcePath);
+                    var segments = path.Split(Path.AltDirectorySeparatorChar).ToList();
 
-                // remove first dir name
-                if (segments.Count > 2)
-                    segments.RemoveAt(0);
+                    temp = string.Join("_", segments.ToArray());
+                    temp = temp.ToUpper();
 
-                id = string.Join("_", segments.ToArray());
-                id = id.ToUpper();
+                    // remove file extension
+                    temp = temp.Replace("." + Type, string.Empty);
+                }
 
-                // remove file extension
-                id = id.Replace("." + Type, string.Empty);
-
-                text += id;
-                return text;
+                text += temp;
+                return text.Trim();
             }
         }
 
@@ -78,15 +88,15 @@ namespace MFCResourceGenerator.Model
                 text += "\t\t" + Type.ToUpper();
 
                 // add file path
-                text += "\t\t" + FilePath;
+                text += "\t\t" + FileRelativePath;
 
-                return text;
+                return text.Trim();
             }
         }
 
         public override string ToString()
         {
-            return "File: " + FilePath;
+            return "File: " + FileRelativePath;
         }
     }
 }

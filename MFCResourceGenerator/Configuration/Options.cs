@@ -28,7 +28,7 @@ namespace MFCResourceGenerator.Configuration
             set { _resPath = Path.GetFullPath(value); }
         }
 
-        [Option("outpath", Required = false, HelpText = "Output directory to be generated.")]
+        [Option("opath", Required = false, HelpText = "Output directory to be generated.")]
         public string OutputPath 
         {
             get { return _outPath; }

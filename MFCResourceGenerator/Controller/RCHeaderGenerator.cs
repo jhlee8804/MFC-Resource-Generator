@@ -25,9 +25,8 @@ namespace MFCResourceGenerator.Controller
         public bool Create()
         {
             if (Options.Verbose)
-                Trace.WriteLine("# Read resource.h template.");
+                Console.WriteLine(Environment.NewLine + "# Read resource.h template.");
 
-            string header = File.ReadAllText(HEADER_FILE);
             string contents = string.Empty;
 
             for (int i = 0; i < Items.Count; ++i)
@@ -40,18 +39,36 @@ namespace MFCResourceGenerator.Controller
                 idText += "\t" + (i + 100);
 
                 if (Options.Verbose)
-                    Trace.WriteLine("\t" + idText);
+                    Console.WriteLine("\t" + idText);
 
                 contents += idText;
             }
 
-            header = header.Replace(PLACE_HOLDER, contents);
+            string newContents = File.ReadAllText(HEADER_FILE);
+            newContents = newContents.Replace(PLACE_HOLDER, contents);
             
-            string newHeaderPath = HEADER_FILE.Replace(".temp", string.Empty);
-            File.WriteAllText(newHeaderPath, header);
+            string newPath = HEADER_FILE.Replace(".temp", string.Empty);
+            newPath = Path.Combine(Options.OutputPath, newPath);
 
-            if (Options.Verbose)
-                Trace.WriteLine("# Succeed to generate header file: " + newHeaderPath);
+            bool overwrite = true;
+
+            if (File.Exists(newPath))
+            {
+                string oldContents = File.ReadAllText(newPath);
+                overwrite = oldContents != newContents;
+            }
+
+            if (overwrite)
+            {
+                File.WriteAllText(newPath, newContents);
+
+                if (Options.Verbose)
+                    Console.WriteLine("# Succeed to generate header file: " + newPath);
+            }
+            else
+            {
+                Console.WriteLine("# Nothing changed header file.");
+            }
 
             return true;
         }
