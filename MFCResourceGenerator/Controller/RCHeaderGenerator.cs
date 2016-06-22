@@ -46,6 +46,7 @@ namespace MFCResourceGenerator.Controller
 
             string newContents = File.ReadAllText(HEADER_FILE);
             newContents = newContents.Replace(PLACE_HOLDER, contents);
+            newContents += Environment.NewLine;  // fatal error RC1004: unexpected end of file found
             
             string newPath = HEADER_FILE.Replace(".temp", string.Empty);
             newPath = Path.Combine(Options.OutputPath, newPath);
@@ -60,7 +61,7 @@ namespace MFCResourceGenerator.Controller
 
             if (overwrite)
             {
-                File.WriteAllText(newPath, newContents);
+                File.WriteAllText(newPath, newContents, Encoding.Unicode);
 
                 if (Options.Verbose)
                     Console.WriteLine("# Succeed to generate header file: " + newPath);

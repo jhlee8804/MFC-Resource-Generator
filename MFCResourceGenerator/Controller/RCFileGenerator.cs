@@ -59,7 +59,7 @@ namespace MFCResourceGenerator.Controller
 
             if (overwrite)
             {
-                File.WriteAllText(newPath, newContents);
+                File.WriteAllText(newPath, newContents, Encoding.Unicode);
 
                 if (Options.Verbose)
                     Console.WriteLine("# Succeed to generate rc file: " + newPath);

@@ -88,7 +88,7 @@ namespace MFCResourceGenerator.Model
                 text += "\t\t" + Type.ToUpper();
 
                 // add file path
-                text += "\t\t" + FileRelativePath;
+                text += "\t\t" + "\"" + FileRelativePath + "\"";
 
                 return text.Trim();
             }
