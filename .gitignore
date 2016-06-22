@@ -1,0 +1,8 @@
+# User Configuration File #
+###################
+*.suo
+
+# Compiled #
+###################
+**/bin
+**/obj

@@ -66,21 +66,21 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resource\dpi100\button\btn_hide.jpg" />
-    <Content Include="Resource\dpi100\button\btn_show.jpg" />
-    <Content Include="Resource\dpi100\panel\solution_explorer.jpg" />
-    <Content Include="Resource\dpi100\panel\test_explorer.jpg" />
-    <Content Include="Resource\dpi100\panel\toolbox.jpg" />
-    <Content Include="Resource\dpi200\button\btn_hide.jpg" />
-    <Content Include="Resource\dpi200\button\btn_show.jpg" />
-    <Content Include="Resource\dpi200\panel\solution_explorer.jpg" />
-    <Content Include="Resource\dpi200\panel\test_explorer.jpg" />
-    <Content Include="Resource\dpi200\panel\toolbox.jpg" />
-    <Content Include="Resource\dpi300\button\btn_hide.jpg" />
-    <Content Include="Resource\dpi300\button\btn_show.jpg" />
-    <Content Include="Resource\dpi300\panel\solution_explorer.jpg" />
-    <Content Include="Resource\dpi300\panel\test_explorer.jpg" />
-    <Content Include="Resource\dpi300\panel\toolbox.jpg" />
+    <Content Include="Resource\dpi100\button\btn_hide.png" />
+    <Content Include="Resource\dpi100\button\btn_show.png" />
+    <Content Include="Resource\dpi100\panel\solution_explorer.png" />
+    <Content Include="Resource\dpi100\panel\test_explorer.png" />
+    <Content Include="Resource\dpi100\panel\toolbox.png" />
+    <Content Include="Resource\dpi200\button\btn_hide.png" />
+    <Content Include="Resource\dpi200\button\btn_show.png" />
+    <Content Include="Resource\dpi200\panel\solution_explorer.png" />
+    <Content Include="Resource\dpi200\panel\test_explorer.png" />
+    <Content Include="Resource\dpi200\panel\toolbox.png" />
+    <Content Include="Resource\dpi300\button\btn_hide.png" />
+    <Content Include="Resource\dpi300\button\btn_show.png" />
+    <Content Include="Resource\dpi300\panel\solution_explorer.png" />
+    <Content Include="Resource\dpi300\panel\test_explorer.png" />
+    <Content Include="Resource\dpi300\panel\toolbox.png" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
