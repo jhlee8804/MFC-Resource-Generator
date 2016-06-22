@@ -1,2 +1,2 @@
-# mfc_rc_generator
+# MFC Resource Generator
 Auto generate *.rc file for MFC Image DLL
